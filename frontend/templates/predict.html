@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict Drug - Drugpredictor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap + FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            background: linear-gradient(to right, #c2e9fb, #a1c4fd);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .predict-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .predict-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="predict-box">
+    <h2><i class="fas fa-pills me-2"></i>Drug Predictor</h2>
+
+    {% if prediction %}
+        <div class="alert alert-success text-center" role="alert">
+            <strong>Predicted Drug:</strong> {{ prediction }}
+        </div>
+    {% endif %}
+
+    <form action="/predict" method="POST">
+        <div class="mb-3">
+            <label for="age" class="form-label">Age</label>
+            <input type="number" class="form-control" name="Age" id="age" placeholder="18" required>
+        </div>
+        <div class="mb-3">
+            <label for="sex" class="form-label">Sex</label>
+            <select class="form-select" name="Sex" id="sex" required>
+                <option value="">Select</option>
+                <option value="F">Female</option>
+                <option value="M">Male</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="bp" class="form-label">Blood Pressure</label>
+            <select class="form-select" name="BP" id="bp" required>
+                <option value="">Select</option>
+                <option value="LOW">LOW</option>
+                <option value="NORMAL">NORMAL</option>
+                <option value="HIGH">HIGH</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="cholesterol" class="form-label">Cholesterol</label>
+            <select class="form-select" name="Cholesterol" id="cholesterol" required>
+                <option value="">Select</option>
+                <option value="NORMAL">NORMAL</option>
+                <option value="HIGH">HIGH</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="na" class="form-label">Sodium (Na)</label>
+            <input type="number" step="0.01" class="form-control" name="Na" id="na" required>
+        </div>
+        <div class="mb-3">
+            <label for="k" class="form-label">Potassium (K)</label>
+            <input type="number" step="0.01" class="form-control" name="K" id="k" required>
+        </div>
+        <div class="d-grid">
+            <button type="submit" class="btn btn-success"><i class="fas fa-vial me-2"></i>Predict</button>
+        </div>
+    </form>
+<div class ="table-responsive">  
+    {% if history %}
+        <h4>Your Recent Predictions:</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Age</th><th>Sex</th><th>BP</th><th>Cholesterol</th>
+                    <th>Na</th><th>K</th><th>Drug</th><th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in history %}
+                <tr>
+                    <td>{{ row.Age }}</td><td>{{ row.Sex }}</td><td>{{ row.BP }}</td><td>{{ row.Cholesterol }}</td>
+                    <td>{{ row.Na }}</td><td>{{ row.K }}</td><td>{{ row.predicted_drug }}</td><td>{{ row.predicted_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>    
+</div>
+
+</body>
+</html>

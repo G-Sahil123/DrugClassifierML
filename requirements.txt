@@ -1,0 +1,10 @@
+flask
+pandas
+scikit-learn
+rdkit-pypi
+joblib
+openai
+python-dotenv
+matplotlib
+seaborn
+mysql-connector-python
