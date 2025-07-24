@@ -11,8 +11,8 @@ model2 = joblib.load(os.path.join(MODEL_DIR, "model_logistic.pkl"))
 model3 = joblib.load(os.path.join(MODEL_DIR, "model_df.pkl"))
 
 # Load Encoders
-ordinal_encoder = joblib.load(os.path.join(BASE_DIR, "ordinal_encoder.pkl"))
-label_encoder = joblib.load(os.path.join(BASE_DIR, "label_encoder.pkl"))
+ordinal_encoder = joblib.load(os.path.join(MODEL_DIR, "ordinal_encoder.pkl"))
+label_encoder = joblib.load(os.path.join(MODEL_DIR, "label_encoder.pkl"))
 
 feature_order = ['Age', 'Sex', 'BP', 'Cholesterol', 'Na', 'K']
 

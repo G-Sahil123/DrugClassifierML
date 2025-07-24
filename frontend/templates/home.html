@@ -58,6 +58,81 @@
                 width: 100%;
             }
         }
+
+        #chatbot-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: #f7f9fc;
+    border-left: 2px solid #007bff;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+    transition: right 0.3s ease;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+#chatbot-panel.open {
+    right: 0;
+}
+
+#chatbot-header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#chatbox {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+
+#chatbot-footer {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+#user-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#chatbot-footer button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Floating Open Button */
+#chatbot-open-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 16px;
+    z-index: 9998;
+    cursor: pointer;
+}        
+            
     </style>
 </head>
 <body>
@@ -74,6 +149,53 @@
         </a>
     </div>
 </div>
+
+<!-- Chatbot Sidebar -->
+<div id="chatbot-panel">
+  <div id="chatbot-header">
+    <span>💬 Chatbot Assistant</span>
+    <button onclick="toggleChatbot()">×</button>
+  </div>
+  <div id="chatbox"></div>
+  <div id="chatbot-footer">
+    <input type="text" id="user-input" placeholder="Ask about this project..." onkeydown="if(event.key==='Enter') sendMessage()">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<!-- Floating Open Button -->
+<button id="chatbot-open-btn" onclick="toggleChatbot()">🧠 Open Chat</button>
+
+<script>
+function toggleChatbot() {
+    const panel = document.getElementById("chatbot-panel");
+    const button = document.getElementById("chatbot-open-btn");
+    const isOpen = panel.classList.toggle("open");
+    button.style.display = isOpen ? "none" : "block";
+}
+
+async function sendMessage() {
+    const input = document.getElementById("user-input");
+    const chatbox = document.getElementById("chatbox");
+
+    const userMessage = input.value.trim();
+    if (!userMessage) return;
+
+    chatbox.innerHTML += `<div><strong>You:</strong> ${userMessage}</div>`;
+    input.value = "";
+    chatbox.scrollTop = chatbox.scrollHeight;
+
+    const response = await fetch("/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage })
+    });
+
+    const data = await response.json();
+    chatbox.innerHTML += `<div><strong>Bot:</strong> ${data.response}</div>`;
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+</script>
 
 </body>
 </html>

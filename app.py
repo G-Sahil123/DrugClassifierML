@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, jsonify
 import mysql.connector
 import os
 from dotenv import load_dotenv
 from datetime import datetime
 from  predictor import majority_vote_predict
+from chatbot.chat_engine import get_response
 
 dotenv_path = os.path.join(os.path.dirname(__file__), 'backend', '.env')
 load_dotenv(dotenv_path)
@@ -86,7 +87,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        print(f"Attempting to login with email: {email} and password: {password}")
+        # print(f"Attempting to login with email: {email} and password: {password}")
 
         conn = get_db_connection()
         cur = conn.cursor(dictionary=True)
@@ -94,7 +95,7 @@ def login():
         user = cur.fetchone()
         conn.close()
 
-        print(f"Query result: {user}")  # Debug print: Check the result of the query
+        # print(f"Query result: {user}")  # Debug print: Check the result of the query
 
         if user:
             print(f"User found: {user}")  # Debug print
@@ -168,7 +169,12 @@ def predict():
         return render_template('predict.html', prediction=result,history=history)
 
     return render_template("predict.html", prediction=None)
-    
+
+@app.route("/chatbot", methods=["POST"])
+def chatbot_response():
+    user_input = request.json.get("message", "")
+    response = get_response(user_input)
+    return jsonify({"response": response})  
 
 @app.route('/logout')
 def logout():

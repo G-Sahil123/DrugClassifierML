@@ -1,0 +1,89 @@
+{
+  "intents": [
+    {
+      "tag": "model_info",
+      "patterns": [
+        "Tell me about the model",
+        "Which algorithm did you use",
+        "How does your ML model work",
+        "What models have you trained"
+      ],
+      "responses": [
+        "We trained Decision Tree, Random Forest, and Logistic Regression models ensembled to predict drug types based on patient health data."
+      ]
+    },
+    {
+      "tag": "accuracy",
+      "patterns": [
+        "What is the model accuracy",
+        "How accurate is your model",
+        "What performance did you get",
+        "Give me model results"
+      ],
+      "responses": [
+        "Our hard voting ensemble model achieved over 90% accuracy on the test set."
+      ]
+    },
+    {
+      "tag": "dataset",
+      "patterns": [
+        "Which dataset did you use",
+        "Where is the data from",
+        "Tell me about your dataset"
+      ],
+      "responses": [
+        "We used a health-related dataset with attributes like Age, Sex, Blood Pressure, Cholesterol, and Na/K levels."
+      ]
+    },
+    {
+      "tag": "drug_info",
+      "patterns": [
+        "What is Drug A used for",
+        "Tell me about Drug B",
+        "Explain Drug C",
+        "What does Drug X do"
+      ],
+      "responses": [
+        "Drug A is commonly prescribed for high blood pressure. Drug B and C target different health conditions. The classification is based on patient parameters."
+      ]
+    },
+    {
+      "tag": "project_info",
+      "patterns": [
+        "What is this project",
+        "Explain Drug Classifier",
+        "What's the aim of this app",
+        "Tell me the purpose"
+      ],
+      "responses": [
+        "This is a drug prediction system that uses ML to predict the most suitable drug for a patient based on medical attributes."
+      ]
+    },
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hello",
+        "Hey there",
+        "Good morning"
+      ],
+      "responses": [
+        "Hello! Ask me anything about the Drug Classifier project.",
+        "Hi there! How can I help you with this app?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "Goodbye",
+        "See you later",
+        "Exit"
+      ],
+      "responses": [
+        "Goodbye! Feel free to come back if you have more questions.",
+        "Take care!"
+      ]
+    }
+  ]
+}
