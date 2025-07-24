@@ -29,4 +29,4 @@ model.fit(X, y)
 with open("chatbot/chatbot_model.pkl", "wb") as f:
     pickle.dump((model, data), f)
 
-print("✅ Chatbot model trained and saved as chatbot_model.pkl")
+# print("✅ Chatbot model trained and saved as chatbot_model.pkl")
