@@ -7,7 +7,7 @@ A web application that predicts the most suitable drug for a patient based on me
 - ML model prediction (Decision Tree / RF / Logistic)
 - User-specific prediction history stored in MySQL
 - Model trained using scikit-learn
-- (Optional) GenAI-powered chatbot for analytics
+- (Optional) GenAI-powered chatbot for queries
 - Responsive frontend using Bootstrap
 
 ## 🧠 Tech Stack
@@ -25,13 +25,17 @@ A web application that predicts the most suitable drug for a patient based on me
 │ ├── models/
 │ ├── database.sql
 │ └── genai_utils.py
+├── chatbot/
+│ ├── chat_engine.py
+│ └── train_bot.py
 ├── data/
 │ └── Drug.csv
 ├── frontend/
 │ └── templates/
 │ ├── login.html
 │ ├── predict.html
-│ ├── result.html
+│ ├── home.html
 │ └── register.html
+├── notebooks/
 
 
