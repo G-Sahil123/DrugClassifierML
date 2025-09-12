@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from datetime import datetime
 from  predictor import majority_vote_predict
 from chatbot.chat_engine import get_response
+# import pandas as pd
+# from collections import Counter
 
 dotenv_path = os.path.join(os.path.dirname(__file__), 'backend', '.env')
 load_dotenv(dotenv_path)
@@ -175,6 +177,29 @@ def chatbot_response():
     user_input = request.json.get("message", "")
     response = get_response(user_input)
     return jsonify({"response": response})  
+
+# @app.route("/dashboard")
+# def dashboard():
+#     conn = get_db_connection()
+#     df = pd.read_sql("SELECT predicted_drug, timestamp FROM predictions", conn)
+#     conn.close()
+
+#     # Pie chart data
+#     drug_counts = dict(Counter(df["predicted_drug"]))
+
+#     # Monthly trend
+#     df['month'] = pd.to_datetime(df['timestamp']).dt.to_period("M").astype(str)
+#     monthly_trend = df.groupby("month")["predicted_drug"].count().to_dict()
+
+#     top_drug = max(drug_counts, key=drug_counts.get)
+#     total = sum(drug_counts.values())
+#     insight = f"In the current analysis, Drug '{top_drug}' is the most frequently predicted drug, accounting for {drug_counts[top_drug]} out of {total} predictions."
+
+#     return render_template("dashboard.html",
+#                            drug_counts=drug_counts,
+#                            monthly_trend=monthly_trend,
+#                            insight=insight)    
+
 
 @app.route('/logout')
 def logout():
