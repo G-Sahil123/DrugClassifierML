@@ -8,3 +8,4 @@ matplotlib
 seaborn
 mysql-connector-python
 nltk
+imbalanced-learn
