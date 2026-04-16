@@ -98,7 +98,7 @@ def login():
         # print(f"Query result: {user}")  # Debug print: Check the result of the query
 
         if user:
-            print(f"User found: {user}")  # Debug print
+            # print(f"User found: {user}")  # Debug print
             session['user_id'] = user['user_id']
             flash('Login successful!', 'success')
             return redirect('/predict')
