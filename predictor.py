@@ -1,18 +1,17 @@
 import joblib 
 import numpy as np 
-from collections import Counter
 import os
 
 BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "backend")
 MODEL_DIR = os.path.join(BASE_DIR, "models")
 # Load Models
-model1 = joblib.load(os.path.join(MODEL_DIR, "model_rf.pkl"))
-model2 = joblib.load(os.path.join(MODEL_DIR, "model_logistic.pkl"))
-model3 = joblib.load(os.path.join(MODEL_DIR, "model_df.pkl"))
+model = joblib.load(os.path.join(MODEL_DIR, "voting_model.pkl"))
 
 # Load Encoders
-ordinal_encoder = joblib.load(os.path.join(MODEL_DIR, "ordinal_encoder.pkl"))
-label_encoder = joblib.load(os.path.join(MODEL_DIR, "label_encoder.pkl"))
+le_sex = joblib.load(os.path.join(MODEL_DIR, "le_sex.pkl"))
+le_bp = joblib.load(os.path.join(MODEL_DIR, "le_bp.pkl"))
+le_chol = joblib.load(os.path.join(MODEL_DIR, "le_chol.pkl"))
+le_drug = joblib.load(os.path.join(MODEL_DIR, "le_drug.pkl"))
 
 feature_order = ['Age', 'Sex', 'BP', 'Cholesterol', 'Na', 'K']
 
@@ -29,36 +28,37 @@ def encode_input(user_input):
         }
 
         import pandas as pd
-        df = pd.DataFrame(df_input)
+        data = pd.DataFrame(df_input)
+        data['Na_K_ratio'] = data['Na']/(data['K'] +1e-6)
+        data['is_low_bp'] = (data['BP'] == 'LOW').astype(int)
+        data['is_high_bp'] = (data['BP'] == 'HIGH').astype(int)
+
+        data['is_drugC_condition'] = (
+            (data['BP'] == 'LOW') & 
+            (data['Cholesterol'] == 'HIGH')
+        ).astype(int)
 
         # Encode categorical features
-        df[['Sex', 'BP', 'Cholesterol']] = ordinal_encoder.transform(
-            df[['Sex', 'BP', 'Cholesterol']]
-        )
+        data['Sex'] = le_sex.transform(data['Sex'])
+        data['BP'] = le_bp.transform(data['BP'])
+        data['Cholesterol'] = le_chol.transform(data['Cholesterol'])
 
-        return df  # Return DataFrame with same column names as during training
+        return data  # Return DataFrame with same column names as during training
 
     except Exception as e:
         raise ValueError(f"Encoding error: {e}")
     
 
-def majority_vote_predict(user_input):
+def prediction(user_input):
     """
     Takes in a user input dict, returns predicted drug name via majority vote.
     """
     try:
         X = encode_input(user_input)
-
-        # Get predictions from each model
-        preds = [
-            model1.predict(X)[0],
-            model2.predict(X)[0],
-            model3.predict(X)[0]
-        ]
-
-        # Majority voting
-        final_numeric = Counter(preds).most_common(1)[0][0]
-        final_label = label_encoder.inverse_transform([final_numeric])[0]
+        if X['Na_K_ratio'].iloc[0] > 15:
+            return 'drugY'
+        pred = model.predict(X)
+        final_label = le_drug.inverse_transform(pred)[0]
         return final_label
 
     except Exception as e:
@@ -74,4 +74,4 @@ if __name__ == "__main__":
         "K": 0.1
     }
 
-    print("Predicted Drug:", majority_vote_predict(sample_input))
+    print("Predicted Drug:", prediction(sample_input))
